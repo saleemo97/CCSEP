@@ -127,6 +127,3 @@ Contributions are welcome! Please fork this repository and submit a pull request
 4. Push to the branch (`git push origin feature/your-feature-name`).
 5. Open a pull request.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
