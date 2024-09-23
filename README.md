@@ -12,9 +12,6 @@ This project demonstrates a NoSQL injection vulnerability and its corresponding 
 - [Demonstration](#demonstration)
   - [Vulnerable Login](#vulnerable-login)
   - [Secure Login](#secure-login)
-- [NoSQL Injection Exploit](#nosql-injection-exploit)
-- [Fixing the Vulnerability](#fixing-the-vulnerability)
-- [Contributing](#contributing)
 
 ## Introduction
 
@@ -85,47 +82,15 @@ Once the application is set up and running, you can test the NoSQL injection vul
 
 ### Vulnerable Login
 
-1. Navigate to the `/login` route.
+1. Navigate to the `/vulnerable-login` route.
 2. Use a **vulnerable form** that directly concatenates user input into the MongoDB query.
 3. Try injecting a malicious query like:
    ```
-   { "username": "admin", "$or": [ { "password": "" }, { "1": "1" } ] }
+   {"$gt": ""}
    ```
    This should allow unauthorized access.
 
 ### Secure Login
 
-1. Use the **secure form** that implements MongoDB best practices and parameterized queries.
+1. Use the **secure form**, you can do that by navigating to `/login` route that implements MongoDB best practices and parameterized queries.
 2. The same injection attempt will be thwarted, as it correctly validates and filters input.
-
-## NoSQL Injection Exploit
-
-To demonstrate NoSQL injection:
-- Enter the following in the **vulnerable login** form:
-  ```
-  { "username": "admin", "$or": [ { "password": "" }, { "1": "1" } ] }
-  ```
-- The query will bypass authentication and return a valid result, demonstrating the vulnerability.
-
-## Fixing the Vulnerability
-
-To prevent NoSQL injection, the project uses parameterized queries and MongoDB best practices in the secure login implementation. For example, you should validate and sanitize user inputs before passing them to MongoDB queries.
-
-The secure query implementation:
-```php
-$user = User::where('username', '=', $username)
-            ->where('password', '=', $hashedPassword)
-            ->first();
-```
-
-## Contributing
-
-Contributions are welcome! Please fork this repository and submit a pull request with any improvements.
-
-### Steps to Contribute
-
-1. Fork the repository.
-2. Create your feature branch (`git checkout -b feature/your-feature-name`).
-3. Commit your changes (`git commit -m 'Add your message'`).
-4. Push to the branch (`git push origin feature/your-feature-name`).
-5. Open a pull request.
