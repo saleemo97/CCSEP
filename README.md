@@ -25,9 +25,9 @@ This repository contains two implementations of a simple login feature:
 
 Before you begin, ensure you have met the following requirements:
 
-- [XAMPP](https://www.apachefriends.org/) (or any PHP development environment)
+- [XAMPP](https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/8.2.4/) (or any PHP development environment)
 - [Composer](https://getcomposer.org/)
-- PHP >= 8.2.x
+- PHP >= 8.2.4
 - Laravel 10.x
 - MongoDB 8.0.0 (2008R2plus SSL)
 
