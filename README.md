@@ -1,4 +1,3 @@
-
 # SQL Injection Vulnerability Demo in Laravel
 
 This project demonstrates an SQL injection vulnerability and its corresponding mitigation using Laravel. It shows how vulnerable code can be exploited and how to prevent SQL injection using parameterized queries.
@@ -15,7 +14,6 @@ This project demonstrates an SQL injection vulnerability and its corresponding m
 - [SQL Injection Exploit](#sql-injection-exploit)
 - [Fixing the Vulnerability](#fixing-the-vulnerability)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Introduction
 
@@ -126,4 +124,3 @@ Contributions are welcome! Please fork this repository and submit a pull request
 3. Commit your changes (`git commit -m 'Add your message'`).
 4. Push to the branch (`git push origin feature/your-feature-name`).
 5. Open a pull request.
-
