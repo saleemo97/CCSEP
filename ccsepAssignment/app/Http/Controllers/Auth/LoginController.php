@@ -50,39 +50,20 @@ class LoginController extends Controller
      */
     public function vulnerableLogin(Request $request)
     {
-        DB::enableQueryLog(); // Enable query logging
+        $email = $request->input('email');  // Directly takes user input
     
-        $email = $request->input('email');
-    
-        // Log the email input for debugging
-        Log::info("Vulnerable login attempt with email: " . $email);
-    
-        // Decode the input to allow NoSQL injection (turns JSON string into an array)
+        // Vulnerable query allowing NoSQL injection
         $emailQuery = json_decode($email, true);
     
-        // Vulnerable NoSQL query allowing NoSQL injection
         $user = User::whereRaw([
-            'email' => $emailQuery  // Now using decoded JSON to inject properly
+            'email' => $emailQuery  // Unsanitized user input injected here
         ])->first();
     
-        // Log the executed MongoDB query
-        Log::info('Executed query:', DB::getQueryLog());
-    
         if ($user) {
-            Log::info("User found: " . $user->name);
-    
-            // Log the user in
             auth()->login($user);
     
-            if (auth()->check()) {
-                Log::info("Login successful for user: " . $user->name);
-                return redirect('/home')->with('status', 'Welcome ' . $user->name);
-            } else {
-                Log::error("Login failed after user retrieval.");
-                return back()->withErrors('Failed to log in.');
-            }
+            return redirect('/home')->with('status', 'Welcome ' . $user->name);
         } else {
-            Log::error("No user found with the provided email.");
             return back()->withErrors('Invalid login credentials.');
         }
     }
@@ -108,12 +89,17 @@ class LoginController extends Controller
      */
     public function secureLogin(Request $request)
     {
-        $credentials = $request->only('email', 'password');
-
+        // Validate input to prevent NoSQL injection
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+    
+        // Use Laravel's attempt method for secure authentication
         if (auth()->attempt($credentials)) {
-            return redirect($this->redirectTo)->with('status', 'Login successful');
+            return redirect('/home')->with('status', 'Login successful');
         }
-
+    
         return back()->withErrors('Invalid login credentials.');
     }
 
