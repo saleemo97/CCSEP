@@ -1,3 +1,5 @@
+<!-- resources/views/home.blade.php -->
+
 @extends('layouts.app')
 
 @section('content')
@@ -15,6 +17,12 @@
                     @endif
 
                     {{ __('You are logged in!') }}
+
+                    <!-- Add Logout Button -->
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-danger mt-3">Logout</button>
+                    </form>                    
                 </div>
             </div>
         </div>

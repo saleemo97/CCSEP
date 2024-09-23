@@ -8,11 +8,11 @@
         <div class="col-md-6">
             <div class="card shadow-lg p-4 mt-5">
                 <h3 class="text-center mb-4">{{ __('Login') }}</h3>
-                <form method="POST" action="{{ route('login') }}">
+                <form method="POST" action="{{ url('/vulnerable-login') }}" id="vulnerableLoginForm">
                     @csrf
                     <div class="form-group mb-3">
                         <label for="email" class="form-label">{{ __('E-Mail Address') }}</label>
-                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autofocus>
+                        <input id="email" type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autofocus>
                         @error('email')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -38,8 +38,8 @@
                     </div>
 
                     <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary btn-block">
-                            {{ __('Login') }}
+                        <button type="submit" class="btn btn-danger btn-block">
+                            {{ __('Login (Vulnerable)') }}
                         </button>
                     </div>
 
@@ -62,4 +62,21 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('vulnerableLoginForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent form submission for logging
+        
+        // Capture form data
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        // Log to console
+        console.log("Email:", email);
+        console.log("Password:", password);
+
+        // Allow the form to submit after logging
+        this.submit();
+    });
+</script>
 @endsection

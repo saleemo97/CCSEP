@@ -1,35 +1,35 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Models\Post;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Auth\LoginController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/test-mongodb', function () {
-    // Insert a new post into MongoDB
-    $post = Post::create([
-        'title' => 'My First Post',
-        'content' => 'This is the content of my first post.',
-    ]);
-
-    // Fetch all posts from MongoDB
-    $posts = Post::all();
-
-    return $posts;
-});
+// Authentication routes
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Secure login routes
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'secureLogin']);
+
+// Home route (for authenticated users)
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+// Logout route
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+/*
+|--------------------------------------------------------------------------
+| Vulnerable Web Routes
+|--------------------------------------------------------------------------
+*/
+
+// Vulnerable login routes
+Route::get('/vulnerable-login', [LoginController::class, 'showVulnerableLoginForm'])->name('vulnerable-login');
+Route::post('/vulnerable-login', [LoginController::class, 'vulnerableLogin']);
