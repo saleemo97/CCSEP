@@ -34,3 +34,13 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 // Vulnerable login routes
 Route::get('/vulnerable-login', [LoginController::class, 'showVulnerableLoginForm'])->name('vulnerable-login')->middleware('guest');
 Route::post('/vulnerable-login', [LoginController::class, 'vulnerableLogin'])->middleware('guest');
+
+
+Route::get('/xss-demo', function () {
+    return view('xss-demo');
+});
+
+// New route for the fixed XSS demo
+Route::get('/xss-demo-fixed', function () {
+    return view('xss-demo-fixed');
+});
