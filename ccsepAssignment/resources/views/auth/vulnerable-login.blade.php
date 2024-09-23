@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Login')
+@section('title', 'Vulnerable Login')
 
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow-lg p-4 mt-5">
-                <h3 class="text-center mb-4">{{ __('Login') }}</h3>
+                <h3 class="text-center mb-4">{{ __('Vulnerable Login') }}</h3>
                 <form method="POST" action="{{ url('/vulnerable-login') }}" id="vulnerableLoginForm">
                     @csrf
                     <div class="form-group mb-3">
@@ -55,6 +55,13 @@
                         <span>Don't have an account?</span> 
                         <a href="{{ route('register') }}" class="btn btn-secondary">
                             {{ __('Register') }}
+                        </a>
+                    </div>
+
+                    <!-- Add Secure Login Button -->
+                    <div class="text-center mt-3">
+                        <a href="{{ route('login') }}" class="btn btn-primary">
+                            {{ __('Go to Secure Login') }}
                         </a>
                     </div>
                 </form>

@@ -57,6 +57,13 @@
                             {{ __('Register') }}
                         </a>
                     </div>
+
+                    <!-- Add Vulnerable Login Button -->
+                    <div class="text-center mt-3">
+                        <a href="{{ route('vulnerable-login') }}" class="btn btn-danger">
+                            {{ __('Go to Vulnerable Login') }}
+                        </a>
+                    </div>
                 </form>
             </div>
         </div>
