@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log; // Also make sure Log is imported
+
 
 class LoginController extends Controller
 {
@@ -47,21 +50,46 @@ class LoginController extends Controller
      */
     public function vulnerableLogin(Request $request)
     {
+        DB::enableQueryLog(); // Enable query logging
+    
         $email = $request->input('email');
-        $password = $request->input('password');
-
+    
+        // Log the email input for debugging
+        Log::info("Vulnerable login attempt with email: " . $email);
+    
+        // Decode the input to allow NoSQL injection (turns JSON string into an array)
+        $emailQuery = json_decode($email, true);
+    
         // Vulnerable NoSQL query allowing NoSQL injection
         $user = User::whereRaw([
-            'email' => $email,  // Vulnerable to injection
-            'password' => $password
+            'email' => $emailQuery  // Now using decoded JSON to inject properly
         ])->first();
-
-        // Log the user in
-        auth()->login($user);
-        redirect('/home')->with('status', 'Welcome ' . $user->name);
-
+    
+        // Log the executed MongoDB query
+        Log::info('Executed query:', DB::getQueryLog());
+    
+        if ($user) {
+            Log::info("User found: " . $user->name);
+    
+            // Log the user in
+            auth()->login($user);
+    
+            if (auth()->check()) {
+                Log::info("Login successful for user: " . $user->name);
+                return redirect('/home')->with('status', 'Welcome ' . $user->name);
+            } else {
+                Log::error("Login failed after user retrieval.");
+                return back()->withErrors('Failed to log in.');
+            }
+        } else {
+            Log::error("No user found with the provided email.");
+            return back()->withErrors('Invalid login credentials.');
+        }
     }
-
+    
+    
+    
+    
     /**
      * Show the secure login form.
      *
