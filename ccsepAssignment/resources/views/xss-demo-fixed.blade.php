@@ -34,14 +34,8 @@
         function greetUser() {
             var userInput = document.getElementById('name').value;
             console.log("User input:", userInput); // Log input
-
-            // Method 1: Use textContent (safest, but doesn't allow any HTML)
-            // document.getElementById('greeting').textContent = userInput;
-
-            // Method 2: Use escapeHTML function
-            // document.getElementById('greeting').innerHTML = escapeHTML(userInput);
-
-            // Method 3: Use DOMPurify (allows safe HTML if needed)
+            
+            // Use DOMPurify (allows safe HTML if needed)
             document.getElementById('greeting').innerHTML = DOMPurify.sanitize(userInput);
             
             // Debug output

@@ -68,9 +68,6 @@ class LoginController extends Controller
         }
     }
     
-    
-    
-    
     /**
      * Show the secure login form.
      *
