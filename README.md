@@ -1,7 +1,7 @@
 
-# MongoDB Vulnerability Demo in Laravel
+# CCSEP Assignment (Laravel) Web Application
 
-This project demonstrates a NoSQL injection vulnerability and its corresponding mitigation using MongoDB with Laravel. It shows how vulnerable code can be exploited and how to prevent NoSQL injection using MongoDB best practices and parameterized queries.
+This project demonstrates a NoSQL injection, and DOM-Based XSS vulnerability and its corresponding mitigations using MongoDB with Laravel. It shows how vulnerable code can be exploited and how to prevent NoSQL injection aswell as XSS attacks using MongoDB best practices and parameterized queries.
 
 ## Table of Contents
 
