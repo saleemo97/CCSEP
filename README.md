@@ -1,7 +1,7 @@
 
-# SQL Injection Vulnerability Demo in Laravel
+# CCSEP Assignment (Laravel) Web Application
 
-This project demonstrates an SQL injection vulnerability and its corresponding mitigation using Laravel. It shows how vulnerable code can be exploited and how to prevent SQL injection using parameterized queries.
+This project demonstrates a NoSQL injection, and DOM-Based XSS vulnerability and its corresponding mitigations using MongoDB with Laravel. It shows how vulnerable code can be exploited and how to prevent NoSQL injection aswell as XSS attacks using MongoDB best practices and parameterized queries.
 
 ## Table of Contents
 
@@ -12,28 +12,24 @@ This project demonstrates an SQL injection vulnerability and its corresponding m
 - [Demonstration](#demonstration)
   - [Vulnerable Login](#vulnerable-login)
   - [Secure Login](#secure-login)
-- [SQL Injection Exploit](#sql-injection-exploit)
-- [Fixing the Vulnerability](#fixing-the-vulnerability)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Introduction
 
-SQL Injection is a type of web application vulnerability that allows an attacker to interfere with the queries made to the database. In this demo, a Laravel-based application is intentionally made vulnerable to SQL injection in one form and mitigated in another.
+NoSQL Injection is a type of web application vulnerability that allows an attacker to manipulate database queries in non-relational databases, such as MongoDB. In this demo, a Laravel-based application is intentionally made vulnerable to NoSQL injection in one form and mitigated in another.
 
 This repository contains two implementations of a simple login feature:
-1. **Vulnerable to SQL Injection**: Uses raw SQL queries directly with user input, making it susceptible to attacks.
-2. **Secure from SQL Injection**: Uses parameterized queries (prepared statements) to prevent such vulnerabilities.
+1. **Vulnerable to NoSQL Injection**: Uses direct MongoDB queries with user input, making it susceptible to injection attacks.
+2. **Secure from NoSQL Injection**: Uses MongoDB best practices and parameterized queries to prevent such vulnerabilities.
 
 ## Requirements
 
 Before you begin, ensure you have met the following requirements:
 
-- [XAMPP](https://www.apachefriends.org/) (or any PHP development environment)
+- [XAMPP](https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/8.2.4/) (or any PHP development environment)
 - [Composer](https://getcomposer.org/)
-- PHP >= 8.1
-- MySQL (included in XAMPP)
+- PHP >= 8.2.4
 - Laravel 10.x
+- MongoDB 8.0.0 (2008R2plus SSL)
 
 ## Installation
 
@@ -41,35 +37,37 @@ Follow these steps to set up the project in your local environment:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/sql_injection_demo.git
+   git clone https://github.com/your-username/nosql_injection_demo.git
    ```
 
 2. Navigate to the project directory:
    ```bash
-   cd sql_injection_demo
+   cd ccsepAssignment
    ```
 
-3. Install Laravel dependencies via Composer:
+3. Install Laravel dependencies via Composer, including MongoDB support:
    ```bash
    composer install
+   composer require mongodb/laravel-mongodb
+   composer require laravel/ui
+   php artisan ui bootstrap --auth
+   npm install
+   npm run dev
    ```
 
 4. Set up the `.env` file:
    - Copy the `.env.example` file and rename it to `.env`.
-   - Configure your database settings:
+   - Configure your database settings for MongoDB:
      ```env
-     DB_CONNECTION=mysql
-     DB_HOST=127.0.0.1
-     DB_PORT=3306
-     DB_DATABASE=laravel_demo
-     DB_USERNAME=root
-     DB_PASSWORD=  // leave blank for default XAMPP setup
+      DB_CONNECTION=mongodb
+      DB_HOST=127.0.0.1
+      DB_PORT=27017
+      DB_DATABASE=ccsep
+      DB_USERNAME=
+      DB_PASSWORD=
      ```
 
-5. Run the database migrations to create the necessary tables:
-   ```bash
-   php artisan migrate
-   ```
+5. **Optional**: If MongoDB authentication is enabled, ensure you provide the correct username and password in the `.env` file.
 
 6. Start the Laravel development server:
    ```bash
@@ -80,50 +78,19 @@ Follow these steps to set up the project in your local environment:
 
 ## Usage
 
-Once the application is set up and running, you can test the SQL injection vulnerability and the secure implementation using the following steps:
+Once the application is set up and running, you can test the NoSQL injection vulnerability and the secure implementation using the following steps:
 
 ### Vulnerable Login
 
-1. Navigate to the `/login` route.
-2. Use a **vulnerable form** that directly concatenates user input into the SQL query.
+1. Navigate to the `/vulnerable-login` route.
+2. Use a **vulnerable form** that directly concatenates user input into the MongoDB query.
 3. Try injecting a malicious query like:
    ```
-   admin' OR '1'='1
+   {"$gt": ""}
    ```
    This should allow unauthorized access.
 
 ### Secure Login
 
-1. Use the **secure form** that implements parameterized queries (prepared statements).
-2. The same injection attempt will be thwarted as it correctly binds parameters and prevents SQL injection.
-
-## SQL Injection Exploit
-
-To demonstrate SQL injection:
-- Enter the following in the **vulnerable login** form:
-  ```
-  admin' OR '1'='1
-  ```
-- The SQL query formed will bypass authentication and return a valid result, demonstrating the vulnerability.
-
-## Fixing the Vulnerability
-
-To prevent SQL injection, the project uses **prepared statements** in the secure login implementation. Prepared statements automatically escape special characters and safely bind user input to the query, mitigating the risk of SQL injection.
-
-The secure query implementation:
-```php
-$user = DB::select("SELECT * FROM users WHERE username = ?", [$username]);
-```
-
-## Contributing
-
-Contributions are welcome! Please fork this repository and submit a pull request with any improvements.
-
-### Steps to Contribute
-
-1. Fork the repository.
-2. Create your feature branch (`git checkout -b feature/your-feature-name`).
-3. Commit your changes (`git commit -m 'Add your message'`).
-4. Push to the branch (`git push origin feature/your-feature-name`).
-5. Open a pull request.
-
+1. Use the **secure form**, you can do that by navigating to `/login` route that implements MongoDB best practices and parameterized queries.
+2. The same injection attempt will be thwarted, as it correctly validates and filters input.
