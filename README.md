@@ -1,96 +1,127 @@
 
-# CCSEP Assignment (Laravel) Web Application
+# NoSQL Injection and DOM-Based XSS Vulnerability Demo
 
-This project demonstrates a NoSQL injection, and DOM-Based XSS vulnerability and its corresponding mitigations using MongoDB with Laravel. It shows how vulnerable code can be exploited and how to prevent NoSQL injection aswell as XSS attacks using MongoDB best practices and parameterized queries.
+This project demonstrates a **NoSQL injection** vulnerability using **MongoDB** and **PHP**, as well as **DOM-Based XSS** vulnerabilities and their mitigations. It illustrates how insecure code can be exploited by attackers and provides examples of how to secure against these types of vulnerabilities using proper input sanitization and best practices.
 
 ## Table of Contents
 
 - [Introduction](#introduction)
 - [Requirements](#requirements)
-- [Installation](#installation)
+- [Setup and Installation](#setup-and-installation)
 - [Usage](#usage)
-- [Demonstration](#demonstration)
-  - [Vulnerable Login](#vulnerable-login)
-  - [Secure Login](#secure-login)
+- [Vulnerabilities Demonstrated](#vulnerabilities-demonstrated)
+  - [NoSQL Injection](#nosql-injection)
+  - [DOM-Based XSS](#dom-based-xss)
+- [Mitigation Techniques](#mitigation-techniques)
 
 ## Introduction
 
-NoSQL Injection is a type of web application vulnerability that allows an attacker to manipulate database queries in non-relational databases, such as MongoDB. In this demo, a Laravel-based application is intentionally made vulnerable to NoSQL injection in one form and mitigated in another.
+NoSQL Injection is a type of vulnerability that allows attackers to manipulate queries in non-relational databases, like MongoDB, by injecting malicious inputs. DOM-Based XSS allows attackers to manipulate the client-side JavaScript to perform unintended actions.
 
-This repository contains two implementations of a simple login feature:
-1. **Vulnerable to NoSQL Injection**: Uses direct MongoDB queries with user input, making it susceptible to injection attacks.
-2. **Secure from NoSQL Injection**: Uses MongoDB best practices and parameterized queries to prevent such vulnerabilities.
+This project includes:
+1. **Vulnerable Implementation**: A simple login feature vulnerable to NoSQL Injection and a page vulnerable to DOM-Based XSS.
+2. **Secure Implementation**: Examples of how to secure such features using best practices.
 
 ## Requirements
 
-Before you begin, ensure you have met the following requirements:
+Ensure you have the following installed in your environment:
 
-- [XAMPP](https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/8.2.4/) (or any PHP development environment)
+- [XAMPP](https://www.apachefriends.org/index.html) (or any PHP development environment)
 - [Composer](https://getcomposer.org/)
-- PHP >= 8.2.4
-- Laravel 10.x
-- MongoDB 8.0.0 (2008R2plus SSL)
+- [PHP MongoDB Extension](https://pecl.php.net/package/mongodb)
+- **PHP >= 8.2.x**
+- **MongoDB >= 4.0** (Downgraded to demonstrate vulnerabilities)
+- **MongoDB Compass** (Optional, for GUI access)
 
-## Installation
+## Setup and Installation
 
 Follow these steps to set up the project in your local environment:
 
-1. Clone the repository:
+1. **Clone the Repository**:
    ```bash
    git clone https://github.com/your-username/nosql_injection_demo.git
    ```
 
-2. Navigate to the project directory:
+2. **Navigate to Project Directory**:
    ```bash
-   cd ccsepAssignment
+   cd nosql_injection_demo
    ```
 
-3. Install Laravel dependencies via Composer, including MongoDB support:
+3. **Install Dependencies via Composer**:
+   - Ensure Composer is installed and run:
    ```bash
    composer install
-   composer require mongodb/laravel-mongodb
-   composer require laravel/ui
-   php artisan ui bootstrap --auth
-   npm install
-   npm run dev
    ```
 
-4. Set up the `.env` file:
-   - Copy the `.env.example` file and rename it to `.env`.
-   - Configure your database settings for MongoDB:
-     ```env
-      DB_CONNECTION=mongodb
-      DB_HOST=127.0.0.1
-      DB_PORT=27017
-      DB_DATABASE=ccsep
-      DB_USERNAME=
-      DB_PASSWORD=
-     ```
-
-5. **Optional**: If MongoDB authentication is enabled, ensure you provide the correct username and password in the `.env` file.
-
-6. Start the Laravel development server:
+4. **Install MongoDB PHP Extension**:
+   - Install the MongoDB driver for PHP. You can do this via **PECL**:
    ```bash
-   php artisan serve
+   pecl install mongodb
+   ```
+   - Add the extension to your `php.ini` file:
+   ```ini
+   extension=mongodb
    ```
 
-7. Open the application in your browser at `http://localhost:8000/login`.
+5. **Set Up MongoDB**:
+   - Start your MongoDB server. You can use **MongoDB Compass** to create a database named `vulnerable_app` with a collection `users`.
+
+6. **Run the PHP Server**:
+   - Start a PHP server from the project directory:
+   ```bash
+   php -S localhost:8000
+   ```
+   - Open the application in your browser at `http://localhost:8000/`.
 
 ## Usage
 
-Once the application is set up and running, you can test the NoSQL injection vulnerability and the secure implementation using the following steps:
+Once the application is set up and running, you can test the NoSQL injection vulnerability and the DOM-Based XSS using the following steps:
 
-### Vulnerable Login
+### Vulnerable Login (NoSQL Injection)
 
-1. Navigate to the `/vulnerable-login` route.
-2. Use a **vulnerable form** that directly concatenates user input into the MongoDB query.
-3. Try injecting a malicious query like:
+1. Navigate to `/nosql_injection.php` (the login page).
+2. Enter the following credentials:
+   - **Username**: `sam`
+   - **Password**: `{"$ne": ""}`
+3. If the vulnerability exists, this payload will bypass the password check, allowing unauthorized access.
+
+### Vulnerable DOM-Based XSS
+
+1. Navigate to `/dom_xss.php`.
+2. In the input field, enter the following payload:
+   ```html
+   <script>alert('XSS');</script>
    ```
-   {"$gt": ""}
-   ```
-   This should allow unauthorized access.
+3. If vulnerable, the script will execute an alert on the page, demonstrating a DOM-Based XSS attack.
 
-### Secure Login
+## Vulnerabilities Demonstrated
 
-1. Use the **secure form**, you can do that by navigating to `/login` route that implements MongoDB best practices and parameterized queries.
-2. The same injection attempt will be thwarted, as it correctly validates and filters input.
+### NoSQL Injection
+
+- **Description**: User inputs are directly used in the MongoDB query, allowing attackers to inject query operators.
+- **Example Attack**: Inputting `{"$ne": ""}` as a password allows bypassing authentication checks.
+
+### DOM-Based XSS
+
+- **Description**: User inputs are directly used to manipulate the DOM without sanitization, allowing script injection.
+- **Example Attack**: Entering `<script>alert('XSS');</script>` causes JavaScript code to execute in the victim's browser.
+
+## Mitigation Techniques
+
+### Preventing NoSQL Injection
+
+- **Sanitize Input**: Ensure user inputs are strictly validated and typed.
+- **Use JSON Decoding Safely**: Allow JSON-like inputs only when necessary, and sanitize them before using them in queries.
+- **Parameterized Queries**: Use parameterized queries or query-building libraries that enforce input types.
+
+### Preventing DOM-Based XSS
+
+- **Escape User Input**: Use functions like `textContent` instead of `innerHTML` to ensure input is not interpreted as HTML.
+- **Content Security Policy (CSP)**: Implement CSP headers to restrict the execution of JavaScript code.
+
+## Additional Notes
+
+- **Security Warning**: This project is intentionally made vulnerable for educational purposes. Do **not** use this code in a production environment.
+- **MongoDB Version**: The project demonstrates NoSQL injection more effectively with older MongoDB versions (like 4.x) due to fewer built-in protections.
+
+Feel free to explore the code and modify it to test different vulnerabilities. Use these examples to better understand the importance of secure coding practices in web development.
