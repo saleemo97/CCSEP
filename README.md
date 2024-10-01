@@ -20,7 +20,7 @@ NoSQL Injection is a type of vulnerability that allows attackers to manipulate q
 
 This project includes:
 1. **Vulnerable Implementation**: A simple login feature vulnerable to NoSQL Injection and a page vulnerable to DOM-Based XSS.
-2. **Secure Implementation**: Examples of how to secure such features using best practices.
+2. **Secure Implementation**: Examples showing on how you can secure such features using best practices.
 
 ## Requirements
 
