@@ -134,18 +134,67 @@ Once the application is set up and running, you can test the NoSQL injection vul
 - **Description**: User inputs are directly used to manipulate the DOM without sanitization, allowing script injection.
 - **Example Attack**: Entering `<img src=x onerror="alert('XSS!')">` causes JavaScript code to execute in the victim's browser.
 
+- **Crafting the Script**: 
+  The script is designed to demonstrate the DOM-based XSS vulnerability by directly inserting user input into the DOM without proper validation or sanitization. Here’s how it works:
+  
+  1. **User Input Handling**: The application accepts user input through an input field and uses this input to update the content of the webpage dynamically.
+  
+  2. **DOM Manipulation**: The user input is inserted into the DOM using methods like `innerHTML`, which allows HTML and JavaScript code to be executed. For example:
+     ```javascript
+     document.getElementById('output').innerHTML = userInput;
+     ```
+  
+  3. **Injection Point**: When an attacker inputs `<img src=x onerror="alert('XSS!')">`, the browser attempts to load the image. Since the source is invalid, the `onerror` event is triggered, executing the JavaScript code:
+     ```javascript
+     alert('XSS!');
+     ```
+  
+  4. **Exploiting the Vulnerability**: This allows the attacker to execute arbitrary JavaScript in the context of the victim's browser, potentially leading to data theft, session hijacking, or other malicious actions.
+
+  5. **Mitigation**: To prevent such vulnerabilities, always sanitize and validate user inputs before inserting them into the DOM. Use safer methods like `textContent` instead of `innerHTML` to avoid executing any embedded scripts.
+
 ## Mitigation Techniques
 
 ### Preventing NoSQL Injection
 
-- **Sanitize Input**: Ensure user inputs are strictly validated and typed.
-- **Use JSON Decoding Safely**: Allow JSON-like inputs only when necessary, and sanitize them before using them in queries.
-- **Parameterized Queries**: Use parameterized queries or query-building libraries that enforce input types.
+- **Sanitize Input**: Ensure user inputs are strictly validated and typed. In the provided example, the username is sanitized using `filter_input()` with `FILTER_SANITIZE_STRING` to remove any unwanted characters.
+
+    ```php
+    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+    ```
+
+- **Use JSON Decoding Safely**: Allow JSON-like inputs only when necessary, and sanitize them before using them in queries. The example does not directly use JSON, but it emphasizes the importance of sanitizing inputs.
+
+- **Parameterized Queries**: Use parameterized queries or query-building libraries that enforce input types. While the example uses a direct query, it is crucial to implement libraries that can help prevent injection attacks in a real-world scenario.
+
+- **Password Handling**: Note that while the example matches the registration password directly, it is essential to use secure password hashing (e.g., bcrypt) in production applications to protect user credentials.
+
+    ```php
+    // Example of secure password hashing (not in the provided code)
+    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+    ```
 
 ### Preventing DOM-Based XSS
 
-- **Escape User Input**: Use functions like `textContent` instead of `innerHTML` to ensure input is not interpreted as HTML.
-- **Content Security Policy (CSP)**: Implement CSP headers to restrict the execution of JavaScript code.
+- **Escape User Input**: Use functions like `textContent` instead of `innerHTML` to ensure input is not interpreted as HTML. In the provided example, `textContent` is used to safely display user input, preventing script execution.
+
+    ```javascript
+    document.getElementById('output').textContent = sanitizedInput;
+    ```
+
+- **Sanitize Input**: The example utilizes **DOMPurify** to sanitize user input before inserting it into the DOM. This ensures that any potentially harmful scripts are removed.
+
+    ```javascript
+    var sanitizedInput = DOMPurify.sanitize(userInput);
+    ```
+
+- **Content Security Policy (CSP)**: Implement CSP headers to restrict the execution of JavaScript code. While not shown in the example, adding CSP headers to your web application can significantly reduce the risk of XSS attacks by controlling which scripts can run.
+
+    ```http
+    Content-Security-Policy: default-src 'self'; script-src 'self';
+    ```
+
+- **User Input Handling**: Always validate and sanitize user inputs before using them in any DOM manipulation or database queries to prevent vulnerabilities.
 
 ## Additional Notes
 
