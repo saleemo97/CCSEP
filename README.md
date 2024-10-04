@@ -26,7 +26,6 @@ This project includes:
 
 Ensure you have the following installed in your environment:
 
-- [XAMPP](https://www.apachefriends.org/index.html) (or any PHP development environment)
 - [Composer](https://getcomposer.org/)
 - [PHP MongoDB Extension](https://pecl.php.net/package/mongodb)
 - **PHP >= 8.2.x**
@@ -39,12 +38,12 @@ Follow these steps to set up the project in your local environment:
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-username/nosql_injection_demo.git
+   git clone https://github.com/saleemo97/CCSEP.git
    ```
 
 2. **Navigate to Project Directory**:
    ```bash
-   cd nosql_injection_demo
+   cd CCSEP
    ```
 
 3. **Install Dependencies via Composer**:
@@ -101,7 +100,7 @@ Once the application is set up and running, you can test the NoSQL injection vul
 1. Navigate to `/dom_xss.php`.
 2. In the input field, enter the following payload:
    ```html
-   <script>alert('XSS');</script>
+   <img src=x onerror="alert('XSS!')">
    ```
 3. If vulnerable, the script will execute an alert on the page, demonstrating a DOM-Based XSS attack.
 
@@ -115,7 +114,7 @@ Once the application is set up and running, you can test the NoSQL injection vul
 ### DOM-Based XSS
 
 - **Description**: User inputs are directly used to manipulate the DOM without sanitization, allowing script injection.
-- **Example Attack**: Entering `<script>alert('XSS');</script>` causes JavaScript code to execute in the victim's browser.
+- **Example Attack**: Entering `<img src=x onerror="alert('XSS!')">` causes JavaScript code to execute in the victim's browser.
 
 ## Mitigation Techniques
 
@@ -132,7 +131,4 @@ Once the application is set up and running, you can test the NoSQL injection vul
 
 ## Additional Notes
 
-- **Security Warning**: This project is intentionally made vulnerable for educational purposes. Do **not** use this code in a production environment.
 - **MongoDB Version**: The project demonstrates NoSQL injection more effectively with older MongoDB versions (like 4.x) due to fewer built-in protections.
-
-Feel free to explore the code and modify it to test different vulnerabilities. Use these examples to better understand the importance of secure coding practices in web development.
