@@ -56,14 +56,14 @@ Follow these steps to set up the project in your local environment:
 4. **Install MongoDB PHP Extension**:
    - Install the MongoDB driver for PHP. You can do this via **PECL**:
 
-   - **Windows**:
+   -- **Windows**:
    Go to the following link to install the driver and install the Thread Safe version of the PHP Driver
    
    ```bash
    https://pecl.php.net/package/mongodb/1.17.1/windows
    ```
 
-   - **Linux**:
+   -- **Linux**:
    ```bash
    pecl install mongodb
    ```
