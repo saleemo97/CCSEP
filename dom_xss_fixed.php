@@ -8,6 +8,7 @@
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">Output:</h5>
+        <p class="card-text">This section displays the sanitized message you entered above. Any potentially harmful scripts will be removed showing us the sanitized output.</p>
         <p id="output" class="card-text"></p>
     </div>
 </div>
