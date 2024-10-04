@@ -1,4 +1,3 @@
-
 # NoSQL Injection and DOM-Based XSS Vulnerability Demo
 
 This project demonstrates a **NoSQL injection** vulnerability using **MongoDB** and **PHP**, as well as **DOM-Based XSS** vulnerabilities and their mitigations. It illustrates how insecure code can be exploited by attackers and provides examples of how to secure against these types of vulnerabilities using proper input sanitization and best practices.
@@ -110,6 +109,25 @@ Once the application is set up and running, you can test the NoSQL injection vul
 
 - **Description**: User inputs are directly used in the MongoDB query, allowing attackers to inject query operators.
 - **Example Attack**: Inputting `{"$ne": ""}` as a password allows bypassing authentication checks.
+  
+- **Crafting the Script**: 
+  The script is designed to demonstrate the NoSQL injection vulnerability by directly incorporating user input into a MongoDB query without proper validation or sanitization. Here’s how it works:
+  
+  1. **User Input Handling**: The application accepts user input for authentication (e.g., username and password) and directly uses this input in the MongoDB query.
+  
+  2. **Query Construction**: The query is constructed as follows:
+     ```javascript
+     const user = await db.collection('users').findOne({ username: inputUsername, password: inputPassword });
+     ```
+  
+  3. **Injection Point**: When an attacker inputs `{"$ne": ""}` as the password, the query effectively becomes:
+     ```javascript
+     const user = await db.collection('users').findOne({ username: 'attackerUsername', password: { "$ne": "" } });
+     ```
+  
+  4. **Bypassing Authentication**: This query checks if the password is not equal to an empty string, which is always true for any existing user, thus allowing the attacker to bypass authentication checks.
+
+  5. **Mitigation**: To prevent such vulnerabilities, always validate and sanitize user inputs before using them in database queries. Consider using parameterized queries or ORM libraries that handle input safely.
 
 ### DOM-Based XSS
 
