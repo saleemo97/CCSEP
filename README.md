@@ -56,7 +56,7 @@ Follow these steps to set up the project in your local environment:
 
 
    -- **Windows**:
-   Go to the following link to install the driver and install the Thread Safe version of the PHP Driver
+   Go to the following link to download the driver and make sure to download the Thread Safe (x64) version of the PHP Driver
    
    ```bash
    https://pecl.php.net/package/mongodb/1.17.1/windows
