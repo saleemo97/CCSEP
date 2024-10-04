@@ -69,7 +69,7 @@ Follow these steps to set up the project in your local environment:
 
    - Add the extension to your `php.ini` file:
    ```ini
-   extension=mongodb
+   extension=php_mongodb
    ```
 
 5. **Set Up MongoDB**:
