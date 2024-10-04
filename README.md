@@ -82,6 +82,12 @@ Follow these steps to set up the project in your local environment:
    ```
    - Open the application in your browser at `http://localhost:8000/`.
 
+7. **Run the MongoDB Server**:
+   - Start the MongoDB server from the command line:
+   ```bash
+   mongod
+   ```
+
 ## Usage
 
 Once the application is set up and running, you can test the NoSQL injection vulnerability and the DOM-Based XSS using the following steps:
